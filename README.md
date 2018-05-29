@@ -84,7 +84,7 @@ edges = cv2.Canny(image=blur_gray, threshold1=50, threshold1=150, apertureSize=3
 And then, a few behind-the-scenes rhos and thetas later, we have our [Hough Line](https://docs.opencv.org/master/dd/d1a/group__imgproc__feature.html#ga8618180a5948286384e3b7ca02f6feeb) results.
 
 ```python
-lines = cv2.HoughLinesP(image=edges, lines=5, rho=np.pi/180, theta=100, threshold=100, maxLineGap=10)
+lines = cv2.HoughLinesP(image=edges, rho=1, theta=np.pi/180, threshold=80, minLineLength=15, maxLineGap=5)
 for x1,y1,x2,y2 in lines[0]:
     cv2.line(img,(x1,y1),(x2,y2),(0,255,0),2)
 ```
@@ -95,7 +95,7 @@ for x1,y1,x2,y2 in lines[0]:
 
 Well that wasn't quite what I expected.
 
-I experimented a bit with the hough line, but toggling the parameters kept getting me the same red line.
+I experimented a bit with the hough line, but toggling the parameters kept getting me the same one line.
 
 A bit of digging and I found a [promising post on StackOverflow](https://stackoverflow.com/questions/45322630/how-to-detect-lines-in-opencv)
 
