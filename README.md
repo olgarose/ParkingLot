@@ -12,12 +12,12 @@ This page is a walkthrough of my process and what I learned along the way.
 I'll start with an overview, then talk about my process, and end with some ideas for future work.
 
 ## Overview
-[![Unedited parking lot](https://s3-us-west-2.amazonaws.com/parkinglot-opencv/parking_lot.jpg)](https://www.youtube.com/watch?v=U7HRKjlXK-Y)
+[![Unedited parking lot](https://s3-us-west-2.amazonaws.com/parkinglot-opencv/parking_shot.png)](https://www.youtube.com/watch?v=SszV59YBn_o)
 
 The above link takes you to a video of the parking space detection program in action.
 
 To run:
-```
+```python
 python main.py --image images/parking_lot_1.png --data data/coordinates_1.yml --video videos/parking_lot_1.mp4 --start-frame 400
 ```
 
@@ -30,7 +30,7 @@ Program flow is as follows:
 
 The data on the entering and exiting of these cars can be used for a number of purposes: closest spot detection, analytics on parking lot usage, and for those counters outside of parking garages that tell you how many cars are on each level (to name a few).
 
-This project was my first tour through computer vision, so to get it working in a weekend, I went the "express learning" route. That consisted of auditing this [Computer Vision and Image Analytics course](https://courses.edx.org/courses/course-v1:Microsoft+DEV290x+1T2018/course/), reading through [OpenCV documentation](https://docs.opencv.org/2.4/modules/refman.html), querying the net, and toggling OpenCV function parameters to see what happened. Overall, a lot of learning and a ton of fun.
+This project was my first tour through computer vision, so to get it working in a weekend, I went the "express learning" route. That consisted of auditing this [Computer Vision and Image Analytics course](https://www.edx.org/course/computer-vision-and-image-analysis), reading through [OpenCV documentation](https://docs.opencv.org/2.4/modules/refman.html), querying the net, and toggling OpenCV function parameters to see what happened. Overall, a lot of learning and a ton of fun.
 
 ## Process
 ### The beginning
@@ -49,16 +49,16 @@ The Hough Transform is a popular feature extraction technique for detecting line
 
 The following is a walkthrough to prepare an image to detect lines with the Hough Transform. Links point to OpenCV documentation for each function. Arguments for each function are given as keyword args for clarity.
 
-[Reading](https://docs.opencv.org/3.4.1/d4/da8/group__imgcodecs.html#ga288b8b3da0892bd651fce07b3bbd3a56) in this image:
-```
+[Reading](https://docs.opencv.org/master/d4/da8/group__imgcodecs.html#ga288b8b3da0892bd651fce07b3bbd3a56) in this image:
+```python
 img = cv2.imread(filename='examples/hough_lines/p_lots.jpg')
 ```
 ![Org_hough](https://s3-us-west-2.amazonaws.com/parkinglot-opencv/org.png)
 
 
 
-I [converted it to gray scale](https://docs.opencv.org/3.4.1/d7/d1b/group__imgproc__misc.html#ga397ae87e1288a81d2363b61574eb8cab) to reduce the info in the photo:
-```
+I [converted it to gray scale](https://docs.opencv.org/master/d7/d1b/group__imgproc__misc.html#ga397ae87e1288a81d2363b61574eb8cab) to reduce the info in the photo:
+```python
 gray = cv2.cvtColor(src=img, code=cv2.COLOR_BGR2GRAY)
 ```
 
@@ -66,24 +66,24 @@ gray = cv2.cvtColor(src=img, code=cv2.COLOR_BGR2GRAY)
 
 
 
-Gave it a good [Gaussian blur](https://docs.opencv.org/3.4.1/d4/d86/group__imgproc__filter.html#gaabe8c836e97159a9193fb0b11ac52cf1) to remove even more unnecessary noise:
-```
+Gave it a good [Gaussian blur](https://docs.opencv.org/master/d4/d86/group__imgproc__filter.html#gaabe8c836e97159a9193fb0b11ac52cf1) to remove even more unnecessary noise:
+```python
 blur_gray = cv2.GaussianBlur(image=gray, (ksize=5, ksize=5), borderType=0)
 ```
 ![Blur_hough](https://s3-us-west-2.amazonaws.com/parkinglot-opencv/s_blur.png)
 
 
 
-Detected the edges with [Canny](https://docs.opencv.org/3.4.1/dd/d1a/group__imgproc__feature.html#ga04723e007ed888ddf11d9ba04e2232de):
-```
+Detected the edges with [Canny](https://docs.opencv.org/master/dd/d1a/group__imgproc__feature.html#ga04723e007ed888ddf11d9ba04e2232de):
+```python
 edges = cv2.Canny(image=blur_gray, threshold1=50, threshold1=150, apertureSize=3)
 ```
 ![Canny_hough](https://s3-us-west-2.amazonaws.com/parkinglot-opencv/s_canny.png)
 
 
-And then, a few behind-the-scenes rhos and thetas later, we have our [Hough Line](https://docs.opencv.org/3.4.1/dd/d1a/group__imgproc__feature.html#ga8618180a5948286384e3b7ca02f6feeb) results.
+And then, a few behind-the-scenes rhos and thetas later, we have our [Hough Line](https://docs.opencv.org/master/dd/d1a/group__imgproc__feature.html#ga8618180a5948286384e3b7ca02f6feeb) results.
 
-```
+```python
 lines = cv2.HoughLinesP(image=edges, lines=5, rho=np.pi/180, theta=100, threshold=100, maxLineGap=10)
 for x1,y1,x2,y2 in lines[0]:
     cv2.line(img,(x1,y1),(x2,y2),(0,255,0),2)
