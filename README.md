@@ -68,7 +68,7 @@ gray = cv2.cvtColor(src=img, code=cv2.COLOR_BGR2GRAY)
 
 Gave it a good [Gaussian blur](https://docs.opencv.org/master/d4/d86/group__imgproc__filter.html#gaabe8c836e97159a9193fb0b11ac52cf1) to remove even more unnecessary noise:
 ```python
-blur_gray = cv2.GaussianBlur(image=gray, (ksize=5, ksize=5), borderType=0)
+blur_gray = cv2.GaussianBlur(src=gray, ksize=(5, 5), sigmaX=0)
 ```
 ![Blur_hough](https://s3-us-west-2.amazonaws.com/parkinglot-opencv/s_blur.png)
 
