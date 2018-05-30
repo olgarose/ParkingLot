@@ -7,7 +7,7 @@ from colors import COLOR_GREEN, COLOR_WHITE, COLOR_BLUE
 
 class MotionDetector:
     LAPLACIAN = 1.4
-    DETECT_DELAY = 3
+    DETECT_DELAY = 1
 
     def __init__(self, video, coordinates, start_frame):
         self.video = video
