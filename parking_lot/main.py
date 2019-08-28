@@ -4,6 +4,7 @@ from coordinates_generator import CoordinatesGenerator
 from motion_detector import MotionDetector
 from colors import *
 import logging
+import pickle
 
 
 def main():
@@ -19,6 +20,12 @@ def main():
         with open(data_file, "w+") as points:
             generator = CoordinatesGenerator(image_file, points, COLOR_RED)
             generator.generate()
+        storeCor = open("data\\pastCordinate.pickle", 'wb')
+
+        # source, destination
+        pickle.dump(generator.saveCordinate, storeCor)
+        storeCor.close()
+        print(generator.saveCordinate)
 
     with open(data_file, "r") as data:
         points = yaml.load(data)
