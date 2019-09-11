@@ -15,17 +15,19 @@ def main():
     data_file = args.data_file
     start_frame = args.start_frame
 
+    # If image file is provided, prompt user to generate rectangles
     if image_file is not None:
         with open(data_file, "w+") as points:
             generator = CoordinatesGenerator(image_file, points, COLOR_RED)
             generator.generate()
 
+    # Read coordinates_1.yml in...
     with open(data_file, "r") as data:
         points = yaml.load(data)
         detector = MotionDetector(args.video_file, points, int(start_frame))
         detector.detect_motion()
 
-
+# Function that allows passing in params when running main.py
 def parse_args():
     parser = argparse.ArgumentParser(description='Generates Coordinates File')
 
@@ -52,6 +54,6 @@ def parse_args():
 
     return parser.parse_args()
 
-
+# Runs main function
 if __name__ == '__main__':
     main()
